@@ -2,7 +2,9 @@
 #include<ftxui/dom/elements.hpp>
 #include<ftxui/screen/screen.hpp>
 #include<iostream>
+#include<ftxui/screen/color.hpp>
 #include<string>
+#include<thread>
 
 using namespace std;
 using namespace ftxui;
@@ -10,23 +12,37 @@ using namespace ftxui;
 
 int main(int argc, char const *argv[])
 {
-    const std::string texto = "Hola mundo";
-    Element textElement = text(texto);
+    int fotograma = 0;
     
-    Element dibujo = hbox(textElement | border);
+    string reset;
+    while (true) 
+   
 
-    Dimension Alto = Dimension::fixed(10);
-    Dimension Ancho = Dimension::fixed(10);
+    {
+        fotograma++;
 
-    Screen pantalla = Screen::Create(Ancho,Alto);
+        Element personaje = spinner(21,fotograma);
+        Element cuadro = hbox({personaje});
 
-    Render(pantalla,dibujo);
+        Decorator colorFondo = bgcolor(Color::Black);
+        Decorator colorTexto = color(Color::White);
+    
+        Element dibujo = border({hbox(personaje) | colorFondo | colorTexto});
 
-    pantalla.Print();
-    cout<<endl;
+        Dimensions Alto = Dimension::Fixed(10);
+        Dimensions Ancho = Dimension::Full();
 
+        Screen pantalla = Screen::Create(Ancho,Alto);
 
+        Render(pantalla,dibujo);
 
+        pantalla.Print();
+        reset = pantalla.ResetPosition();
+        cout<<reset;
+
+        this_thread::sleep_for(0.1s);
+    
+    }
 
 
     return 0;
